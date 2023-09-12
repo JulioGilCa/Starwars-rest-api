@@ -10,6 +10,7 @@ import { Profile } from "./pages/protected";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 
+
 const Layout = () => {
     const basename = process.env.BASENAME || "";
 

@@ -1,38 +1,84 @@
 const signupUrl = `${process.env.BACKEND_URL}/api/user`
 const loginUrl = `${process.env.BACKEND_URL}/api/login`
 
-const getState = ({ setStore }) => {
+const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			token: {}
+			token: {},
+			people: [],
 		},
 		actions: {
-			create_user: data => {
-				const response = fetch(signupUrl, {
+			create_user: async (data) => {
+				const response = await fetch(signupUrl, {
 					method: "POST",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(data)
-				}).then(resp => resp.json());
-
-				return response;
+					body: JSON.stringify(data),
+				});
+				const jsonData = await response.json();
+				return jsonData;
 			},
 
-			login: (email, password) => {
-				const response = fetch(loginUrl, {
+
+			login: async (email, password) => {
+				const response = await fetch(loginUrl, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
 					},
 					body: JSON.stringify({ email: email, password: password })
-				}).then(resp => resp.json());
-				return response;
+				});
+				const jsonData = await response.json();
+				return jsonData;
 			},
 
 			setToken: token => {
 				setStore({ token: token });
-			}
+			},
+
+			fetchPeople: async () => {
+				try {
+					const resPromise = await fetch(process.env.BACKEND_URL + "/api/people");
+					if (!resPromise.ok) {
+						throw new Error("Error fetching data");
+					}
+					const data = await resPromise.json();
+					setStore({ people: data });
+				} catch (error) {
+					console.error("Error fetching data:", error);
+				}
+			},
+
+
+			fetchDetailPeople: async (id) => {
+				setStore({ loading: true });
+				const resPromise = await fetch(process.env.BACKEND_URL + `/api/people/${id}`);
+				if (resPromise.ok) {
+					const data = await resPromise.json();
+					setStore({
+						fetchDetailPeople: data,
+						loading: false,
+					});
+				} else {
+					console.error("Error fetching data");
+					setStore({ loading: false });
+				}
+			},
+
+			fetchPlanet: async () => {
+				try {
+					const resPromise = await fetch(process.env.BACKEND_URL + "/api/planet");
+					if (!resPromise.ok) {
+						throw new Error("Error fetching data");
+					}
+					const data = await resPromise.json();
+					setStore({ planet: data });
+				} catch (error) {
+					console.error("Error fetching data:", error);
+				}
+			},
+
 		}
 	};
 };

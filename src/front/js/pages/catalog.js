@@ -6,7 +6,7 @@ import Vehicles from "./vehicles";
 
 const Catalog = () => {
 	return (
-		<div>
+		<div className="back_catalog">
 			<People />
 			<Planets />
 			<Vehicles />

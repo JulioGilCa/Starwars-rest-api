@@ -26,6 +26,7 @@ class User(db.Model):
 class People(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
+    image_url = db.Column(db.String)
     gender = db.Column(db.String(30), unique=False, nullable=False)
     haircolor = db.Column(db.String)
     eyecolor = db.Column(db.String)
@@ -37,6 +38,7 @@ class People(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "image_url": self.image_url,
             "gender": self.gender,
             "haircolor": self.haircolor,
             "eyecolor": self.eyecolor
@@ -48,6 +50,7 @@ class Planet(db.Model):
     name = db.Column(db.String(120), unique=True, nullable=False)
     gravity = db.Column(db.String)
     climate = db.Column(db.String)
+    image_url = db.Column(db.String)
 
     def __repr__(self):
         return f'<Planet {self.name}>'
@@ -57,7 +60,8 @@ class Planet(db.Model):
             "id": self.id,
             "name": self.name,
             "gravity": self.gravity,
-            "climate": self.climate
+            "climate": self.climate,
+            "image_url": self.image_url
         }
 
 
@@ -67,6 +71,7 @@ class Vehicle(db.Model):
     manufacturer = db.Column(db.String)
     length = db.Column(db.String)
     passengers = db.Column(db.String)
+    image_url = db.Column(db.String)
 
     def __repr__(self):
         return f'<Vehicle {self.name}>'
@@ -77,7 +82,8 @@ class Vehicle(db.Model):
             "name": self.name,
             "manufacturer": self.manufacturer,
             "length": self.length,
-            "passengers": self.passengers
+            "passengers": self.passengers,
+            "image_url": self.image_url
         }
 
 
