@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import "../../styles/index.scss";
-
 const peopleUrl = `${process.env.BACKEND_URL}/api/people`;
 const urlPhoto = "https://starwars-visualguide.com/assets/img/characters/"
 
@@ -30,13 +30,13 @@ const People = () => {
             <h1 className='text-white text-center'>Characters</h1>
             <div className="d-flex card-container">
                 {people.map((people) => (
-                    <div key={people.id} className="card card_catalog">
+                    <Link key={people.id} to={`/people/${people.id}`} className="card card_catalog">
                         <h3 className='text-center'>{people.name}</h3>
                         <img src={(urlPhoto) + people.image_url} className='photo' />
                         <p>Gender: {people.gender}</p>
                         <p>Haircolor: {people.haircolor}</p>
                         <p>Eyecolor: {people.eyecolor}</p>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import "../../styles/index.scss";
 
 const planetsUrl = `${process.env.BACKEND_URL}/api/planet`;
@@ -30,13 +31,13 @@ const Planets = () => {
             <h1 className='text-center text-white'>Planets</h1>
             <div className="d-flex card-container">
                 {planet.map((planet) => (
-                    <div key={planet.id} className="card card_catalog">
+                    <Link key={planet.id} to={`/planet/${planet.id}`} className="card card_catalog">
                         <h3 className='text-center'>{planet.name}</h3>
                         <img src={(urlPhoto) + planet.image_url} className='photo' />
                         <p>Gravity: {planet.gravity}</p>
                         <p>Climate: {planet.climate}</p>
                         {/* Agrega más campos según la estructura de tus datos */}
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>

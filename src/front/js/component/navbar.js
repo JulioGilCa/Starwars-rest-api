@@ -39,7 +39,7 @@ export const Navbar = () => {
 		<nav className="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
 			<div className="container">
 				<Link to="/">
-					<span className="navbar-brand">StarWars Api Rest</span>
+					<span className="navbar-brand title_page">StarWars Api Rest</span>
 				</Link>
 				<div className="ml-auto">
 					{token && token !== "" && token !== "undefined" ? (

@@ -3,26 +3,59 @@
 */
 @import url("https://fonts.googleapis.com/css2?family=Amaranth:ital,wght@1,700&display=swap");
 
+html {
+  height: 100%;
+}
+
+/*
 body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
+}
+
+.container {
+  flex: 1;
+} */
+
+.title_page {
+  color: white;
+  font-size: 30px;
+  font-family: "Amaranth", sans-serif;
+  margin-left: 50px;
+  text-decoration: none;
+}
+
+.alert {
+  margin-bottom: 0px;
 }
 
 .footer {
   background-color: rgb(46, 46, 46);
   border-top: 2px solid rgb(180, 180, 180);
-  position: fixed;
   width: 100%;
   bottom: 0;
   color: white;
   font-size: 25px;
+  text-decoration: none;
+}
+
+.footer a {
+  color: white;
+  text-decoration: none;
 }
 
 .dark-background {
   background-color: rgb(0, 0, 0);
   background-image: url("https://fondosmil.com/fondo/23594.jpg");
   margin: 0;
-  height: 95vh;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .force-background {
@@ -30,7 +63,6 @@ body {
   background-image: url("https://img3.wallspic.com/previews/7/3/4/6/56437/56437-star_wars_el_ltimo_de_los_jedi-x750.jpg");
   margin: 0;
   height: 95vh;
-  background-size: cover;
 }
 
 .button_login_darth_vader {
@@ -38,6 +70,7 @@ body {
   color: white;
   border: 2px solid white;
   border-radius: 5px;
+  margin: 50px;
   padding: 10px;
   font-size: 20px;
   width: 200px;
@@ -47,19 +80,6 @@ body {
   background-color: rgb(255, 255, 255);
   color: rgb(0, 0, 0);
   border: 2px solid rgb(0, 0, 0);
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 20px;
-  margin: 10px;
-  width: 200px;
-}
-
-.button_position {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 110vh;
 }
 
 .lado_oscuro {
@@ -86,21 +106,53 @@ body {
   display: flex;
   align-items: center;
   width: 250px;
-  border-radius: 10px;
   margin: 20px;
   margin-bottom: 50px;
+  color: black;
+  text-decoration: none;
 }
 
+.card_catalog:hover {
+  transform: scale(1.1);
+  transition: 0.5s;
+  color: black;
+}
+
+/* 
+    Styles used on the People Detail
+*/
 .back_catalog {
   background-color: black;
+  display: flex;
+  flex-direction: column;
 }
 
-.footer-extras {
-  padding-top: 200px;
-  background-color: rgb(46, 46, 46);
-  border-top: 2px solid rgb(180, 180, 180);
-  width: 100%;
-  bottom: 0;
-  color: white;
-  font-size: 25px;
+.card_detail {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto 20px auto;
+  max-width: 400px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.829);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.card_detail h1 {
+  font-family: "Amaranth", sans-serif;
+  font-size: 40px;
+  color: #333;
+}
+
+.card_detail p {
+  font-family: "Amaranth", sans-serif;
+  font-size: 20px;
+  color: #555;
+  margin: 5px 0;
+}
+
+.photo {
+  max-width: 100%;
+  height: auto;
+  margin-top: 20px;
 }

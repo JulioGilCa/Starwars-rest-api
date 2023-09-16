@@ -23,7 +23,7 @@ export const Profile = () => {
                     <div className="dark-background">
                         <h1 className="lado_oscuro">Estas en el lado oscuro</h1>
                         <h2 className="lado_oscuro_legend">No tienes permiso para acceder a esta zona</h2>
-                        <div className="button_position">
+                        <div>
                             <Link to={"/login"}>
                                 <button className="btn btn-success button_login_darth_vader">Vuelve a la fuerza</button>
                             </Link>

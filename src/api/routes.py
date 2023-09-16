@@ -71,8 +71,6 @@ def login():
     return jsonify({"token": access_token, "user_id": user.id}), 200
 
 
-
-
 # @api.route('/users/favorites/<int:user_id>', methods=['GET'])
 # def get_user_favorites(user_id):
 
@@ -93,12 +91,12 @@ def handle_all_people():
 
 # CHARACTER STAR WARS BY ID
 
-@api.route('/people/<int:people_id>', methods=['GET'])
-def handle_people(id):
-
-    all_people = People.query.all()
-    people_serialized = [people_name.serialize() for people_name in all_people]
-    return jsonify(people_serialized), 200
+@api.route('/people/<int:id>', methods=['GET'])
+def get_people(id):
+    people = People.query.get(id)
+    if people is None:
+        return jsonify({"message": "People not found"}), 404
+    return jsonify({'id': people.id, 'name': people.name, 'gender': people.gender, 'haircolor': people.haircolor, 'eyecolor': people.eyecolor, 'image_url': people.image_url})
 
 
 # DELETE CHARACTER STAR WARS BY ID
@@ -125,13 +123,12 @@ def handle_all_planet():
 
 # PLANET STAR WARS BY ID
 
-@api.route('/planet/<int:planet_id>', methods=['GET'])
-def handle_planet(id):
-
-    all_planets = Planet.query.all()
-    planet_serialized = [planet_name.serialize()
-                         for planet_name in all_planets]
-    return jsonify(planet_serialized), 200
+@api.route('/planet/<int:id>', methods=['GET'])
+def get_planet(id):
+    planet = Planet.query.get(id)
+    if planet is None:
+        return jsonify({"message": "Planet not found"}), 404
+    return jsonify({'id': planet.id, 'name': planet.name, 'climate': planet.climate, 'gravity': planet.gravity, 'image_url': planet.image_url})
 
 
 # ADD PLANET
@@ -170,13 +167,12 @@ def handle_all_vehicle():
 
 # VEHICLE STAR WARS BY ID
 
-@api.route('/vehicle/<int:vehicle_id>', methods=['GET'])
-def handle_vehicle(id):
-
-    all_vehicles = Vehicle.query.all()
-    vehicle_serialized = [vehicle_name.serialize()
-                          for vehicle_name in all_vehicles]
-    return jsonify(vehicle_serialized), 200
+@api.route('/vehicle/<int:id>', methods=['GET'])
+def get_vehicle(id):
+    vehicle = Vehicle.query.get(id)
+    if vehicle is None:
+        return jsonify({"message": "Vehicle not found"}), 404
+    return jsonify({'id': vehicle.id, 'name': vehicle.name, 'manufacturer': vehicle.manufacturer, 'length': vehicle.length, 'passengers': vehicle.passengers, 'image_url': vehicle.image_url})
 
 
 # ADD VEHICLE

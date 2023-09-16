@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import "../../styles/index.scss";
 
 const vehiclesUrl = `${process.env.BACKEND_URL}/api/vehicle`;
@@ -30,13 +31,13 @@ const Vehicles = () => {
             <h1 className='text-white text-center'>Vehicles</h1>
             <div className="d-flex card-container">
                 {vehicles.map((vehicles) => (
-                    <div key={vehicles.id} className="card card_catalog">
+                    <Link key={vehicles.id} to={`/vehicle/${vehicles.id}`} className="card card_catalog">
                         <h3 className='text-center'>{vehicles.name}</h3>
                         <img src={(urlPhoto) + vehicles.image_url} className='photo' />
                         <p>Manufacturer: {vehicles.manufacturer}</p>
                         <p>Length: {vehicles.length}</p>
                         <p>Passengers: {vehicles.passengers}</p>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>

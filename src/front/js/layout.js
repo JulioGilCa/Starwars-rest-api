@@ -1,14 +1,18 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ScrollToTop from "./component/scrollToTop";
-import { Home } from "./pages/home";
-import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
+
+import { Home } from "./pages/home";
+import { Profile } from "./pages/protected";
+import PeopleDetail from './pages/PeopleDetail';
+import PlanetDetail from './pages/PlanetDetail';
+import VehicleDetail from './pages/VehicleDetail';
+
 import Login from "./component/login";
 import Signup from "./component/signup";
-import { Profile } from "./pages/protected";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
+import ScrollToTop from "./component/scrollToTop";
 
 
 const Layout = () => {
@@ -24,8 +28,10 @@ const Layout = () => {
                         <Route path="/protected" element={<Profile />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
-                        <Route path="/single/:theid" element={<Single />} />
-                        <Route path="*" element={<h1>Not found!</h1>} />
+                        <Route path="/people/:id" element={<PeopleDetail />} />
+                        <Route path="/planet/:id" element={<PlanetDetail />} />
+                        <Route path="/vehicle/:id" element={<VehicleDetail />} />
+                        <Route path="*" element={<h1>Page not found!</h1>} />
                     </Routes>
                     <Footer />
                 </ScrollToTop>
