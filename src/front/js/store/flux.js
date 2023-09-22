@@ -6,6 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			token: {},
 			people: [],
+			likedPeople: [],
 		},
 		actions: {
 			create_user: async (data) => {
@@ -78,6 +79,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error fetching data:", error);
 				}
 			},
+
+			likePerson: (personId) => {
+				const { getStore, setStore } = getActions();
+				const likedPeople = getStore().likedPeople;
+
+				// Verificar si el personaje ya está en la lista de "me gusta"
+				if (!likedPeople.includes(personId)) {
+					likedPeople.push(personId);
+					setStore({ likedPeople: likedPeople });
+				}
+			},
+
+			unlikePerson: (personId) => {
+				const { getStore, setStore } = getActions();
+				const likedPeople = getStore().likedPeople;
+
+				// Verificar si el personaje está en la lista de "me gusta"
+				const index = likedPeople.indexOf(personId);
+				if (index !== -1) {
+					likedPeople.splice(index, 1);
+					setStore({ likedPeople: likedPeople });
+				}
+			},
+
+
 
 		}
 	};

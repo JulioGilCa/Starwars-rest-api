@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, People, Planet, Vehicle, User
+from api.models import db, People, Planet, Vehicle, User, Favorites
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 import json
@@ -69,14 +69,6 @@ def login():
 
     access_token = create_access_token(identity=user.id)
     return jsonify({"token": access_token, "user_id": user.id}), 200
-
-
-# @api.route('/users/favorites/<int:user_id>', methods=['GET'])
-# def get_user_favorites(user_id):
-
-#     favorites = Favorites.query.filter_by(user_id=user_id).all()
-#     serialized_favorites = [favorite.serialize() for favorite in favorites]
-#     return jsonify(favorites=serialized_favorites), 200
 
 
 # ALL CHARACTER STAR WARS
@@ -197,6 +189,46 @@ def delete_vehicle(id):
     db.session.delete(vehicle)
     db.session.commit()
     return jsonify({'Vehicle Was Deleted'}), 404
+
+
+# HANDLE FAVORITES
+
+@api.route('/favorites/<int:user_id>', methods=['GET'])
+def get_user_favorites(user_id):
+
+    favorites = Favorites.query.filter_by(user_id=user_id).all()
+    serialized_favorites = [favorite.serialize() for favorite in favorites]
+    return jsonify(favorites=serialized_favorites), 200
+
+# Agregar un elemento a la lista de favoritos del usuario
+
+
+@api.route('/favorites/<int:user_id>', methods=['POST'])
+def add_to_favorites(user_id):
+    try:
+        # Obtén el ID del elemento que el usuario quiere agregar a favoritos desde los datos de la solicitud
+        data = request.json
+        # Asegúrate de enviar este campo desde tu front-end
+        element_id = data.get('element_id')
+
+        # Verifica si el elemento ya está en la lista de favoritos del usuario
+        existing_favorite = Favorites.query.filter_by(
+            user_id=user_id, element_id=element_id).first()
+
+        if existing_favorite:
+            # Si ya está en favoritos, quítalo
+            db.session.delete(existing_favorite)
+            db.session.commit()
+            return jsonify({"message": "Elemento eliminado de favoritos"}), 200
+        else:
+            # Si no está en favoritos, agrégalo
+            new_favorite = Favorites(user_id=user_id, element_id=element_id)
+            db.session.add(new_favorite)
+            db.session.commit()
+            return jsonify({"message": "Elemento agregado a favoritos"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':

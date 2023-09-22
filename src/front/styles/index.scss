@@ -7,19 +7,6 @@ html {
   height: 100%;
 }
 
-/*
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 0;
-}
-
-.container {
-  flex: 1;
-} */
-
 .title_page {
   color: white;
   font-size: 30px;
@@ -155,4 +142,14 @@ body {
   max-width: 100%;
   height: auto;
   margin-top: 20px;
+}
+
+.heart {
+  cursor: pointer;
+  font-size: 24px;
+  color: grey; /* Color del corazón no marcado */
+}
+
+.liked {
+  color: red; /* Color del corazón marcado */
 }
