@@ -30,6 +30,7 @@ class People(db.Model):
     gender = db.Column(db.String(30), unique=False, nullable=False)
     haircolor = db.Column(db.String)
     eyecolor = db.Column(db.String)
+    favorite = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f'<People {self.name}>'
@@ -41,7 +42,8 @@ class People(db.Model):
             "image_url": self.image_url,
             "gender": self.gender,
             "haircolor": self.haircolor,
-            "eyecolor": self.eyecolor
+            "eyecolor": self.eyecolor,
+            "favorite": self.favorite
         }
 
 
@@ -89,10 +91,14 @@ class Vehicle(db.Model):
 
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    planet_id = db.Column(db.Integer, db.ForeignKey('planet.id'))
-    people_id = db.Column(db.Integer, db.ForeignKey('people.id'))
-    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'))
+    user_id = db.Column(db.Integer)
+    people_id = db.Column(db.Integer)
+    planet_id = db.Column(db.Integer)
+    vehicle_id = db.Column(db.Integer)
+
+    #     people_id = db.Column(db.Integer, db.ForeignKey('people.id'))
+    # planet_id = db.Column(db.Integer, db.ForeignKey('planet.id'))
+    # vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'))
 
     def __repr__(self):
         return f'<Favorites user_id: {self.user_id}, id: {self.id}>'
