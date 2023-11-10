@@ -9,7 +9,7 @@ const People = () => {
     const [people, setPeople] = useState([]);
     const [favorites, setFavorites] = useState([]);
     const [isFavorite, setIsFavorite] = useState({}); // Usar un objeto para rastrear el estado de "liked" de cada personaje
-    const user_id = 2; // El usuario actual es el usuario 1
+    // const user_id = 2; // El usuario actual es el usuario 2
 
     useEffect(() => {
         // Llama a la función fetchPeople para obtener los datos de los personajes y actualiza el estado
@@ -46,6 +46,7 @@ const People = () => {
             data.forEach((favorite) => {
                 favoriteMap[favorite.people_id] = true;
             });
+            console.log(favoriteMap)
             setIsFavorite(favoriteMap);
             setFavorites(data); // Actualiza el estado con los personajes favoritos
         } catch (error) {

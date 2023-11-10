@@ -202,7 +202,6 @@ def get_user_favorites(user_id):
 
 # Agregar un elemento a la lista de favoritos del usuario
 
-
 @api.route('/favorites/<int:user_id>', methods=['POST'])
 def add_to_favorites(user_id):
     try:
