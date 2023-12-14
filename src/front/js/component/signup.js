@@ -17,9 +17,8 @@ const Signup = () => {
     });
 
     const token = sessionStorage.getItem("token");
-
     const navigate = useNavigate();
-
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setData((prevData) => ({
@@ -31,7 +30,7 @@ const Signup = () => {
     const submitForm = async event => {
         event.preventDefault();
 
-        if (!data.email || !data.password) {
+        if (!data.email || !data.username || !data.password) {
             Swal.fire({
                 title: "Error",
                 text: "Todos los campos son obligatorios.",
@@ -41,20 +40,9 @@ const Signup = () => {
         };
 
         try {
-            const result = await fetch(signupUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: data.email,
-                    username: data.username,
-                    password: data.password,
-                }),
-            });
-            // const result = await actions.create_user(data);
-            // console.log(result);
-            if (result.status === 200 || result.status === 201) {
+            const result = await actions.create_user(data);
+
+            if (result.created === true || result.status === 200) {
                 Swal.fire({
                     icon: 'success',
                     title: 'Success!',
@@ -62,7 +50,7 @@ const Signup = () => {
                 }).then(() => {
                     navigate.push("/login");
                 });
-            } else if (result.status === 409) {
+            } else if (result.created === false || result.status === 400) {
                 Swal.fire({
                     title: "Error",
                     text: "El usuario ya existe.",

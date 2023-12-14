@@ -1,25 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 import "../../styles/index.scss";
 const peopleUrl = `${process.env.BACKEND_URL}/api/people`;
-const favoritesUrl = `${process.env.BACKEND_URL}/api/favorites/`;
+const urlFavorites = `${process.env.BACKEND_URL}/api/favorites`;
 const urlPhoto = "https://starwars-visualguide.com/assets/img/characters/"
 
 const People = () => {
     const [people, setPeople] = useState([]);
-    const [favorites, setFavorites] = useState([]);
-    const [isFavorite, setIsFavorite] = useState({}); // Usar un objeto para rastrear el estado de "liked" de cada personaje
-    // const user_id = 2; // El usuario actual es el usuario 2
+    const [userFavorites, setUserFavorites] = useState([]);
+    const [token, setToken] = useState(sessionStorage.getItem("token"));
+    const [idUser, setIdUser] = useState('');
+
 
     useEffect(() => {
-        // Llama a la función fetchPeople para obtener los datos de los personajes y actualiza el estado
-        fetchPeople();
-    }, []);
-
-    useEffect(() => {
-        // Llama a la función fetchFavorites para obtener los personajes favoritos del usuario
-        fetchFavorites();
-    }, []);
+        if (token && token !== "" && token !== "undefined") {
+            try {
+                const decodedToken = jwt_decode(token);
+                if (decodedToken && decodedToken.username) {
+                    setIdUser(decodedToken.sub);
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "User not found in token!",
+                    });
+                }
+            } catch (error) {
+                console.error("Error decoding token:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "An error occurred while decoding token!",
+                });
+            }
+        }
+        fetchPeople();      // Llama a la función fetchPeople para obtener los datos de los personajes y actualiza el estado
+    }, [token]);
 
     const fetchPeople = async () => {
         try {
@@ -34,64 +51,37 @@ const People = () => {
         }
     };
 
-    const fetchFavorites = async () => {
+    const fetchUserFavorites = async (user_id) => {
         try {
-            // Llama a la API para obtener los personajes favoritos del usuario actual
-            const response = await fetch(`${favoritesUrl}${user_id}`);
+            // Obtén los favoritos del usuario desde el backend
+            const response = await fetch(`${urlFavorites}/${idUser}`); // Reemplaza userId con el ID del usuario actual
             if (!response.ok) {
-                throw new Error('Error al obtener datos de favoritos');
+                throw new Error('Error al obtener favoritos del usuario');
             }
             const data = await response.json();
-            const favoriteMap = {};
-            data.forEach((favorite) => {
-                favoriteMap[favorite.people_id] = true;
-            });
-            console.log(favoriteMap)
-            setIsFavorite(favoriteMap);
-            setFavorites(data); // Actualiza el estado con los personajes favoritos
+            // Almacena los ID de los favoritos del usuario en el estado
+            setUserFavorites(data.map(favorite => favorite.element_id));
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
-    const handleButtonClick = async ({ user_id, people_id }) => {
+    const toggleFavorite = async (elementId) => {
         try {
-            // Verifica si el personaje ya está en la lista de favoritos del usuario
-            if (isFavorite[people_id]) {
-                // Si ya está en favoritos, quítalo
-                const response = await fetch(`${favoritesUrl}${user_id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ element_id: people_id }),
-                });
-                if (!response.ok) {
-                    throw new Error('Error al eliminar de favoritos');
-                }
-                // Actualiza el estado local o la interfaz de usuario en consecuencia
-                setIsFavorite((prevState) => ({
-                    ...prevState,
-                    [people_id]: false,
-                }));
-            } else {
-                // Si no está en favoritos, agrégalo
-                const response = await fetch(`${favoritesUrl}${user_id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ element_id: people_id }),
-                });
-                if (!response.ok) {
-                    throw new Error('Error al agregar a favoritos');
-                }
-                // Actualiza el estado local o la interfaz de usuario en consecuencia
-                setIsFavorite((prevState) => ({
-                    ...prevState,
-                    [people_id]: true,
-                }));
+            // Envía la solicitud para agregar o quitar el elemento de favoritos
+            const response = await fetch(`${urlFavorites}/${idUser}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ element_id: elementId }),
+            });
+            console.log(response);
+            if (!response.ok) {
+                throw new Error('Error al actualizar favoritos del usuario');
             }
+            // Actualiza la lista de favoritos del usuario después de la modificación
+            fetchUserFavorites();
         } catch (error) {
             console.error('Error:', error);
         }
@@ -109,11 +99,13 @@ const People = () => {
                         <p>Haircolor: {people.haircolor}</p>
                         <p>Eyecolor: {people.eyecolor}</p>
                         <div className='card_catalog_read_like'>
-                            <Link to={`/people/${people.id}`}><button className='myButton'>Leer mas...</button></Link>
+                            <Link to={`/people/${people.id}`}><button className='myButton'>{idUser} Leer mas...</button></Link>
+                            {/* Botón o ícono de corazón para marcar/desmarcar favoritos */}
                             <span
-                                className={`heart ${isFavorite[people.id] ? 'liked' : ''}`}
-                                onClick={() => handleButtonClick({ user_id: user_id, people_id: people.id })}>
-                                <i className="fa-solid fa-heart"></i>
+                                className={`heart ${userFavorites.includes(people.id) ? "selected" : ""}`}
+                                onClick={() => toggleFavorite(people.id)}
+                            >
+                                ❤️
                             </span>
                         </div>
                     </div>

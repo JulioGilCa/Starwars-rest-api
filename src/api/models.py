@@ -30,7 +30,6 @@ class People(db.Model):
     gender = db.Column(db.String(30), unique=False, nullable=False)
     haircolor = db.Column(db.String)
     eyecolor = db.Column(db.String)
-    favorite = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f'<People {self.name}>'
@@ -43,7 +42,6 @@ class People(db.Model):
             "gender": self.gender,
             "haircolor": self.haircolor,
             "eyecolor": self.eyecolor,
-            "favorite": self.favorite
         }
 
 
@@ -96,12 +94,8 @@ class Favorites(db.Model):
     planet_id = db.Column(db.Integer)
     vehicle_id = db.Column(db.Integer)
 
-    #     people_id = db.Column(db.Integer, db.ForeignKey('people.id'))
-    # planet_id = db.Column(db.Integer, db.ForeignKey('planet.id'))
-    # vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'))
-
     def __repr__(self):
-        return f'<Favorites user_id: {self.user_id}, id: {self.id}>'
+        return f'<Favorites user_id: {self.user_id}>'
 
     def serialize(self):
         return {

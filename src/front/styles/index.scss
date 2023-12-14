@@ -154,17 +154,17 @@ html {
   margin-top: 20px;
 }
 
-.heart {
+.heart-icon {
+  color: grey; /* Color del corazón no marcado */
   cursor: pointer;
   font-size: 24px;
-  color: grey; /* Color del corazón no marcado */
 }
 
-.heart:hover {
+.heart-icon:hover {
   color: red; /* Color del corazón al pasar el ratón */
 }
 
-.liked {
+.heart-icon.selected {
   color: red; /* Color del corazón marcado */
 }
 

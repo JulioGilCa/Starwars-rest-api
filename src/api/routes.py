@@ -10,6 +10,9 @@ import json
 api = Blueprint('api', __name__)
 
 
+########### USERS ###########
+
+
 # GET ALL USERS
 
 @api.route('/users', methods=['GET'])
@@ -31,7 +34,7 @@ def get_user(user_id):
 
 # CREATE USER
 
-@api.route('/user', methods=['POST'])
+@api.route('/users', methods=['POST'])
 def create_user():
     email = request.json.get('email')
     username = request.json.get('username')
@@ -53,6 +56,20 @@ def create_user():
     return jsonify({"message": "Usuario creado", "created": True}), 200
 
 
+# DELETE USER BY ID
+
+@api.route('/users/<int:id>', methods=['DELETE'])
+def delete_user(id):
+
+    user = User.query.get(user)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'User Was Deleted'}), 200
+    else:
+        return jsonify({'User Was Deleted'}), 404
+
+
 # LOGIN USER
 
 @api.route('/login', methods=['POST'])
@@ -67,8 +84,12 @@ def login():
     if user is None:
         return jsonify({"message": "El usuario no existe"}), 400
 
-    access_token = create_access_token(identity=user.id)
-    return jsonify({"token": access_token, "user_id": user.id}), 200
+    access_token = create_access_token(identity=user.id, additional_claims={
+                                       'username': user.username})
+    return jsonify({"token": access_token, "user_id": user.id, "username": user.username}), 200
+
+
+########### CHARACTERS ###########
 
 
 # ALL CHARACTER STAR WARS
@@ -79,6 +100,19 @@ def handle_all_people():
     all_people = People.query.all()
     people_serialized = [people_name.serialize() for people_name in all_people]
     return jsonify(people_serialized), 200
+
+# ADD CHARACTER STAR WARS
+
+
+@api.route('/people', methods=['POST'])
+def add_people():
+
+    body = request.get_json()
+    people_list = People(
+        name=body['name'], eyecolor=body['eyecolor'], gender=body['gender'], haircolor=body['haircolor'], image_url=body['image_url'])
+    db.session.add(people_list)
+    db.session.commit()
+    return 'People Was Created', 200
 
 
 # CHARACTER STAR WARS BY ID
@@ -96,10 +130,13 @@ def get_people(id):
 @api.route('/people/<int:id>', methods=['DELETE'])
 def delete_people(id):
 
-    people = People.query.get_or_404(id)
+    people = People.query.get_or_404(people)
     db.session.delete(people)
     db.session.commit()
     return jsonify({'Person Was Deleted'}), 404
+
+
+########### PLANETS ###########
 
 
 # ALL PLANETS STAR WARS
@@ -129,7 +166,7 @@ def add_planet():
 
     body = request.get_json()
     planet_list = Planet(
-        name=body['name'], climate=body['climate'], gravity=body['gravity'])
+        name=body['name'], climate=body['climate'], gravity=body['gravity'], image_url=body['image_url'])
     db.session.add(planet_list)
     db.session.commit()
     return 'Planet Was Created', 200
@@ -140,10 +177,13 @@ def add_planet():
 @api.route('/planet/<int:id>', methods=['DELETE'])
 def delete_planet(id):
 
-    planet = Planet.query.get_or_404(id)
+    planet = Planet.query.get_or_404(planet)
     db.session.delete(planet)
     db.session.commit()
     return jsonify({'Planet Was Deleted'}), 404
+
+
+########### VEHICLES ###########
 
 
 # ALL VEHICLES STAR WARS
@@ -185,13 +225,26 @@ def add_vehicle():
 @api.route('/vehicle/<int:id>', methods=['DELETE'])
 def delete_vehicle(id):
 
-    vehicle = Vehicle.query.get_or_404(id)
+    vehicle = Vehicle.query.get_or_404(vehicle)
     db.session.delete(vehicle)
     db.session.commit()
     return jsonify({'Vehicle Was Deleted'}), 404
 
 
-# HANDLE FAVORITES
+########## FAVORITES ###########
+
+# ALL FAVORITES
+
+@api.route('/favorites', methods=['GET'])
+def handle_all_favorite():
+
+    all_favorites = Favorites.query.all()
+    favorite_serialized = [favorite_name.serialize()
+                           for favorite_name in all_favorites]
+    return jsonify(favorite_serialized), 200
+
+
+# GET FAVORITES BY USER ID
 
 @api.route('/favorites/<int:user_id>', methods=['GET'])
 def get_user_favorites(user_id):
@@ -200,34 +253,31 @@ def get_user_favorites(user_id):
     serialized_favorites = [favorite.serialize() for favorite in favorites]
     return jsonify(favorites=serialized_favorites), 200
 
-# Agregar un elemento a la lista de favoritos del usuario
 
-@api.route('/favorites/<int:user_id>', methods=['POST'])
-def add_to_favorites(user_id):
-    try:
-        # Obtén el ID del elemento que el usuario quiere agregar a favoritos desde los datos de la solicitud
-        data = request.json
-        # Asegúrate de enviar este campo desde tu front-end
-        element_id = data.get('element_id')
+# ADD FAVORITES
 
-        # Verifica si el elemento ya está en la lista de favoritos del usuario
-        existing_favorite = Favorites.query.filter_by(
-            user_id=user_id, element_id=element_id).first()
+@api.route('/favorites', methods=['POST'])
+def add_favorite():
 
-        if existing_favorite:
-            # Si ya está en favoritos, quítalo
-            db.session.delete(existing_favorite)
-            db.session.commit()
-            return jsonify({"message": "Elemento eliminado de favoritos"}), 200
-        else:
-            # Si no está en favoritos, agrégalo
-            new_favorite = Favorites(user_id=user_id, element_id=element_id)
-            db.session.add(new_favorite)
-            db.session.commit()
-            return jsonify({"message": "Elemento agregado a favoritos"}), 200
+    body = request.get_json()
+    favorite_list = Favorites(
+        user_id=body['user_id'], people_id=body['people_id'], planet_id=body['planet_id'], vehicle_id=body['vehicle_id'])
+    db.session.add(favorite_list)
+    db.session.commit()
+    return 'Favorite was Created', 200
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+
+# DELETE FAVORITES
+
+@api.route('/favorites/<int:id>', methods=['DELETE'])
+def delete_favorite(id):
+    favorite = Favorites.query.get(id)
+    if favorite:
+        db.session.delete(favorite)
+        db.session.commit()
+        return jsonify({"message": "Favorite deleted successfully"}), 200
+    else:
+        return jsonify({"message": "Favorite not found"}), 404
 
 
 if __name__ == '__main__':

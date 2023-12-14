@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useStore } from "react";
 import getState from "./flux.js";
 
 export const Context = React.createContext(null);
@@ -21,8 +21,11 @@ const injectContext = PassedComponent => {
 
 		useEffect(() => {
 			state.actions.fetchPeople()
+			// state.actions.create_user()
+			// state.actions.login()
+			// state.actions.fetchPlanet()
+			// state.actions.fetchVehicle()
 		}, []);
-		
 
 		return (
 			<Context.Provider value={state}>
