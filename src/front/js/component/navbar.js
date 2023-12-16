@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import jwt_decode from 'jwt-decode';
 import Swal from 'sweetalert2';
+import "../../styles/index.scss";
 
 export const Navbar = () => {
 	const [token, setToken] = useState(sessionStorage.getItem("token"));
@@ -19,7 +20,6 @@ export const Navbar = () => {
 		if (token && token !== "" && token !== "undefined") {
 			try {
 				const decodedToken = jwt_decode(token);
-				// console.log("Decoded Token:", decodedToken);
 				if (decodedToken && decodedToken.username) {
 					setNameUser(decodedToken.username);
 					setIdUser(decodedToken.sub);
@@ -45,7 +45,7 @@ export const Navbar = () => {
 		<nav className="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
 			<div className="container">
 				<Link to="/">
-					<span className="navbar-brand title_page">StarWars Api Rest</span>
+					<span className="title_page">StarWars Api Rest</span>
 				</Link>
 				<div className="ml-auto">
 					{token && token !== "" && token !== "undefined" ? (

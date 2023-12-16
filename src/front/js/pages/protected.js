@@ -13,9 +13,6 @@ export const Profile = () => {
         <div>
             {token && token !== "" && token !== "undefined" ? (
                 <>
-                    {/* <div className="alert alert-success text-center m-0" role="alert">
-                        <h2>Bienvenido/a, estas en la zona StarWars</h2>
-                    </div> */}
                     <Catalog />
                 </>
             ) : (

@@ -225,10 +225,13 @@ def add_vehicle():
 @api.route('/vehicle/<int:id>', methods=['DELETE'])
 def delete_vehicle(id):
 
-    vehicle = Vehicle.query.get_or_404(vehicle)
-    db.session.delete(vehicle)
-    db.session.commit()
-    return jsonify({'Vehicle Was Deleted'}), 404
+    vehicle = Vehicle.query.get(id)
+    if vehicle:
+        db.session.delete(vehicle)
+        db.session.commit()
+        return jsonify({'Vehicle Was Deleted'}), 200
+    else:
+        return jsonify({'Vehicle not Found'}), 404
 
 
 ########## FAVORITES ###########

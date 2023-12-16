@@ -63,9 +63,6 @@ const Login = () => {
         <div>
             {token && token !== "" && token !== "undefined" ? (
                 <>
-                    <div className="alert alert-success text-center" role="alert">
-                        <h2>Bienvenido/a, estas en la zona StarWars</h2>
-                    </div>
                     <Catalog />
                 </>
             ) : (
@@ -85,7 +82,7 @@ const Login = () => {
                             />
                             <div className="text-center">
                                 <button type="submit" className="btn btn-info">
-                                    Login
+                                    Enter
                                 </button>
                                 <Link to={"/signup"}>
                                     <span className="ms-5 btn btn-success">Sign up</span>

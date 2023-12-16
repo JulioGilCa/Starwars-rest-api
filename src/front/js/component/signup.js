@@ -18,7 +18,7 @@ const Signup = () => {
 
     const token = sessionStorage.getItem("token");
     const navigate = useNavigate();
-    
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setData((prevData) => ({
@@ -105,7 +105,7 @@ const Signup = () => {
                             />
                             <div className="text-center">
                                 <button type="submit" className="btn btn-info mb-3">
-                                    Sign In
+                                    Save
                                 </button>
 
                                 <Link to={"/login"}>

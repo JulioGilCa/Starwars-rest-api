@@ -21,10 +21,8 @@ const injectContext = PassedComponent => {
 
 		useEffect(() => {
 			state.actions.fetchPeople()
-			// state.actions.create_user()
-			// state.actions.login()
-			// state.actions.fetchPlanet()
-			// state.actions.fetchVehicle()
+			state.actions.fetchPlanet()
+			state.actions.fetchVehicle()
 		}, []);
 
 		return (

@@ -1,15 +1,12 @@
-/* 
-    General Styles used on every website (Don't Repeat Yourself)
-*/
 @import url("https://fonts.googleapis.com/css2?family=Amaranth:ital,wght@1,700&display=swap");
 
 html {
   height: 100%;
 }
 
-.title_page {
+.title_page span {
   color: white;
-  font-size: 30px;
+  font-size: 40px;
   font-family: "Amaranth", sans-serif;
   margin-left: 50px;
   text-decoration: none;
