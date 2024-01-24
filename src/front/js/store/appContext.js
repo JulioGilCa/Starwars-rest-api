@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, useStore } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import getState from "./flux.js";
 
-export const Context = React.createContext(null);
 
-export const usePeopleContext = () => React.useContext(Context)
+export const Context = createContext();
+
+export const usePeopleContext = () => useContext(Context)
 
 const injectContext = PassedComponent => {
 	const StoreWrapper = props => {

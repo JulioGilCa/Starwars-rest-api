@@ -4,11 +4,16 @@ html {
   height: 100%;
 }
 
-.title_page span {
+.title_page {
   color: white;
   font-size: 40px;
   font-family: "Amaranth", sans-serif;
   margin-left: 50px;
+  text-decoration: none;
+}
+
+.title_page:hover {
+  color: rgb(255, 255, 255);
   text-decoration: none;
 }
 
@@ -119,6 +124,7 @@ html {
   background-color: black;
   display: flex;
   flex-direction: column;
+  padding: 50px;
 }
 
 .card_detail {
@@ -149,20 +155,6 @@ html {
   max-width: 100%;
   height: auto;
   margin-top: 20px;
-}
-
-.heart-icon {
-  color: grey; /* Color del corazón no marcado */
-  cursor: pointer;
-  font-size: 24px;
-}
-
-.heart-icon:hover {
-  color: red; /* Color del corazón al pasar el ratón */
-}
-
-.heart-icon.selected {
-  color: red; /* Color del corazón marcado */
 }
 
 .myButton {

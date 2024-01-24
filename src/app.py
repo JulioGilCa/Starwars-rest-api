@@ -57,27 +57,6 @@ def sitemap():
     return send_from_directory(static_file_dir, 'index.html')
 
 
-# @app.route("/token", methods=["POST"])
-# def create_token():
-#     email = request.json.get("email")
-#     password = request.json.get("password")
-
-#     user = User.query.filter_by(email=email, password=password).first()
-#     if user is None:
-#         return jsonify({"msg": "Email o Password incorrecto"}), 401
-
-#     access_token = create_access_token(identity=user.id)
-#     return jsonify({"token": access_token, "user_id": user.id})
-
-# @app.route("/area-privada", methods=["GET"])
-# @jwt_required()
-# def protected():
-#     current_user_id = get_jwt_identity()
-#     user = User.query.filter_by(current_user_id)
-
-#     return jsonify({"id": user.id, "email": user.email}), 200
-
-
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))

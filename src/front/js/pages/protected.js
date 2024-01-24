@@ -1,20 +1,16 @@
-import React, { useContext } from "react";
-import { Context } from "../store/appContext";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Catalog from "../pages/catalog";
 import "../../styles/index.scss";
 
 
 export const Profile = () => {
-
     const token = sessionStorage.getItem("token");
 
     return (
         <div>
             {token && token !== "" && token !== "undefined" ? (
-                <>
                     <Catalog />
-                </>
             ) : (
                 <>
                     <div className="dark-background">

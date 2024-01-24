@@ -1,6 +1,6 @@
 import React from "react";
-import People from "../pages/people";
-import Planets from "../pages/planets";
+import People from "./people";
+import Planets from "./planets";
 import Vehicles from "./vehicles";
 
 

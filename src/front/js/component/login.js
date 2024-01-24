@@ -2,69 +2,28 @@ import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import Catalog from "../pages/catalog";
-import Swal from "sweetalert2";
 import "../../styles/index.scss";
 
-const loginUrl = `${process.env.BACKEND_URL}/api/login`
-
 const Login = () => {
-    const [email, setEmail] = useState(""); // Define el estado del correo electrónico
-    const [password, setPassword] = useState(""); // Define el estado de la contraseña
-    const token = sessionStorage.getItem("token");
+    const { store, actions } = useContext(Context);
+    const [token, setToken] = useState(sessionStorage.getItem("token"));
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    const handleOnSubmit = (e) => {
+    const handleOnSubmit = async (e) => {
         e.preventDefault();
 
-        const opts = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            }),
-
-            setToken: token => {
-                setStore({ token: token });
-            }
+        try {
+            const success = await actions.login(email, password);
+        } catch (error) {
+            console.error("There was an error", error);
         }
-
-        fetch(loginUrl, opts)
-            .then(resp => {
-                if (resp.status === 200 || resp.status === 201) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: 'Login successfully!',
-                    })
-                    return resp.json();
-                } else {
-                    Swal.fire({
-                        title: "Error",
-                        text: "Usuario o contraseña incorrectos",
-                        icon: "error",
-                    });
-                    throw new Error("Authentication failed");
-                }
-            })
-            .then(data => {
-                console.log(data);
-                const accessToken = data.token;
-
-                // Almacena el token en sessionStorage
-                sessionStorage.setItem("token", accessToken);
-                window.location.href = "/protected";
-            })
-            .catch(error => {
-                console.error("There was an error", error);
-            });
     };
 
     return (
         <div>
             {token && token !== "" && token !== "undefined" ? (
-                <>
-                    <Catalog />
-                </>
+                <Catalog />
             ) : (
                 <div className="force-background">
                     <form className="d-flex flex-column align-items-center" onSubmit={handleOnSubmit}>
@@ -91,8 +50,9 @@ const Login = () => {
                         </div>
                     </form>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 export default Login;

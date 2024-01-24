@@ -1,20 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import jwt_decode from 'jwt-decode';
 import Swal from 'sweetalert2';
 import "../../styles/index.scss";
+import { Context } from "../store/appContext";
 
 export const Navbar = () => {
+	const { store, actions } = useContext(Context);
 	const [token, setToken] = useState(sessionStorage.getItem("token"));
 	const [nameUser, setNameUser] = useState('');
 	const [idUser, setIdUser] = useState('');
-
-
-	const handleLogout = () => {
-		sessionStorage.removeItem("token");
-		setToken("");
-		window.location.reload();
-	};
 
 	useEffect(() => {
 		if (token && token !== "" && token !== "undefined") {
@@ -44,14 +39,14 @@ export const Navbar = () => {
 	return (
 		<nav className="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
 			<div className="container">
-				<Link to="/">
-					<span className="title_page">StarWars Api Rest</span>
+				<Link className="title_page" to="/">
+					<span>StarWars Api Rest</span>
 				</Link>
 				<div className="ml-auto">
 					{token && token !== "" && token !== "undefined" ? (
 						<div>
-							<span className="text-white mr-2">Hola, {nameUser} ({idUser})  </span>
-							<button onClick={handleLogout} className="btn btn-danger mx-3">Logout</button>
+							<span className="text-white mr-2">Hola {nameUser}</span>
+							<button onClick={actions.handleLogout} className="btn btn-danger mx-3">Logout</button>
 						</div>
 					) : (
 						<p> </p>

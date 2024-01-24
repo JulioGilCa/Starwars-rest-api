@@ -4,10 +4,12 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, People, Planet, Vehicle, User, Favorites
 from api.utils import generate_sitemap, APIException
+from flask_cors import CORS
 from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 import json
 
 api = Blueprint('api', __name__)
+CORS(api)
 
 
 ########### USERS ###########
@@ -260,14 +262,23 @@ def get_user_favorites(user_id):
 # ADD FAVORITES
 
 @api.route('/favorites', methods=['POST'])
+@jwt_required()
 def add_favorite():
-
-    body = request.get_json()
-    favorite_list = Favorites(
-        user_id=body['user_id'], people_id=body['people_id'], planet_id=body['planet_id'], vehicle_id=body['vehicle_id'])
-    db.session.add(favorite_list)
-    db.session.commit()
-    return 'Favorite was Created', 200
+    try:
+        user_id = get_jwt_identity()
+        body = request.get_json()
+        favorite_list = Favorites(
+            user_id=body['user_id'],
+            people_id=body['people_id'],
+            planet_id=body['planet_id'],
+            vehicle_id=body['vehicle_id'],
+            is_favorite=True
+        )
+        db.session.add(favorite_list)
+        db.session.commit()
+        return jsonify({"message": "Favorite was Created"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 # DELETE FAVORITES

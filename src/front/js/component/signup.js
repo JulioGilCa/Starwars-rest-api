@@ -1,12 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link, useNavigate } from "react-router-dom";
+import Catalog from "../pages/catalog";
 import Swal from "sweetalert2";
 import "../../styles/index.scss";
-import Catalog from "../pages/catalog";
-
-const signupUrl = `${process.env.BACKEND_URL}/api/user`
-
 
 const Signup = () => {
     const { actions } = useContext(Context);
@@ -69,9 +66,6 @@ const Signup = () => {
         <div>
             {token && token !== "" && token !== "undefined" ? (
                 <>
-                    <div className="alert alert-success text-center" role="alert">
-                        <h2>Bienvenido/a, estas en la zona StarWars</h2>
-                    </div>
                     <Catalog />
                 </>
             ) : (

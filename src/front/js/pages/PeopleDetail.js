@@ -8,6 +8,7 @@ const urlPhoto = "https://starwars-visualguide.com/assets/img/characters/"
 const PeopleDetail = () => {
     const { id } = useParams();
     const { store, actions } = useContext(Context);
+    const token = sessionStorage.getItem("token");
 
     return (
         <>
