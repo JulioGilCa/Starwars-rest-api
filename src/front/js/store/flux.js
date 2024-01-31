@@ -6,7 +6,8 @@ const signupUrl = `${process.env.BACKEND_URL}/api/user`
 const loginUrl = `${process.env.BACKEND_URL}/api/login`
 const peopleUrl = `${process.env.BACKEND_URL}/api/people`;
 const planetUrl = `${process.env.BACKEND_URL}/api/planet`;
-// const urlFavorites = `${process.env.BACKEND_URL}/api/favorites`;
+const vehicleUrl = `${process.env.BACKEND_URL}/api/vehicle`;
+const urlFavorites = `${process.env.BACKEND_URL}/api/favorites`;
 
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -17,6 +18,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			people: [],
 			planet: [],
 			vehicle: [],
+			favorites: [],
 		},
 		actions: {
 			create_user: async (data) => {
@@ -95,6 +97,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 					const data = await resPromise.json();
 					setStore({ people: data });
+				} catch (error) {
+					console.error("Error fetching data:", error);
+				}
+			},
+
+			fetchFavorites: async () => {
+				try {
+					const resPromise = await fetch(urlFavorites);
+					if (!resPromise.ok) {
+						throw new Error("Error fetching data");
+					}
+					const dataFavorites = await resPromise.json();
+					setStore({ favorites: dataFavorites });
 				} catch (error) {
 					console.error("Error fetching data:", error);
 				}

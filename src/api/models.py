@@ -8,7 +8,6 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
-    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -18,13 +17,12 @@ class User(db.Model):
             "id": self.id,
             "username": self.username,
             "email": self.email,
-            "is_active": self.is_active,
-            # do not serialize the password, its a security breach
         }
 
 
 class People(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer)
     name = db.Column(db.String(120), unique=True, nullable=False)
     image_url = db.Column(db.String)
     gender = db.Column(db.String(30), unique=False, nullable=False)
@@ -37,6 +35,7 @@ class People(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "group_id": self.group_id,
             "name": self.name,
             "image_url": self.image_url,
             "gender": self.gender,
@@ -47,6 +46,7 @@ class People(db.Model):
 
 class Planet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer)
     name = db.Column(db.String(120), unique=True, nullable=False)
     gravity = db.Column(db.String)
     climate = db.Column(db.String)
@@ -58,6 +58,7 @@ class Planet(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "group_id": self.group_id,
             "name": self.name,
             "gravity": self.gravity,
             "climate": self.climate,
@@ -67,6 +68,7 @@ class Planet(db.Model):
 
 class Vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer)
     name = db.Column(db.String(120), unique=True, nullable=False)
     manufacturer = db.Column(db.String)
     length = db.Column(db.String)
@@ -79,6 +81,7 @@ class Vehicle(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "group_id": self.group_id,
             "name": self.name,
             "manufacturer": self.manufacturer,
             "length": self.length,
@@ -90,18 +93,18 @@ class Vehicle(db.Model):
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
-    people_id = db.Column(db.Integer)
-    planet_id = db.Column(db.Integer)
-    vehicle_id = db.Column(db.Integer)
+    group_id = db.Column(db.Integer)
+    card_id = db.Column(db.Integer)
+    # is_favorite = db.Column(db.Boolean)
 
     def __repr__(self):
-        return f'<Favorites user_id: {self.user_id}>'
+        return f'<Favorites {self.id}>'
 
     def serialize(self):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "people_id": self.people_id,
-            "planet_id": self.planet_id,
-            "vehicle_id": self.vehicle_id
+            "group_id": self.group_id,
+            "card_id": self.card_id,
+            # "is_favorite": self.is_favorite
         }

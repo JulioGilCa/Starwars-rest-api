@@ -91,6 +91,13 @@ html {
   border-radius: 10px;
 }
 
+.card-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .card_catalog {
   display: flex;
   flex-direction: column;
@@ -117,14 +124,10 @@ html {
   color: black;
 }
 
-/* 
-    Styles used on the People Detail
-*/
 .back_catalog {
   background-color: black;
   display: flex;
   flex-direction: column;
-  padding: 50px;
 }
 
 .card_detail {
@@ -181,4 +184,133 @@ html {
 .myButton:active {
   position: relative;
   top: 1px;
+}
+
+.like-off {
+  color: white;
+  font-size: 30px;
+}
+
+.like-off:hover {
+  color: rgb(224, 14, 14);
+  font-size: 35px;
+}
+
+.liked {
+  color: rgb(224, 14, 14);
+  font-size: 35px;
+}
+
+/*Styles for catalog */
+
+.xcards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.xcard {
+  position: relative;
+  width: 300px;
+  height: 350px;
+  margin: 20px;
+  perspective: 1000px;
+}
+
+.xcard.favorite .front {
+  border: red 3px solid;
+}
+
+.xcard .face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border: rgb(245, 244, 244) 2px solid;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+
+.xcard .front {
+  transform: perspective(600px) rotateY(0deg);
+  box-shadow: 0 5px 10px #000;
+}
+
+.xcard .front img {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.xcard .front h3 {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  height: 45px;
+  line-height: 45px;
+  color: #fff;
+  text-align: center;
+  background: rgba(245, 244, 244, 0.4);
+}
+
+.xcard .back {
+  transform: perspective(600px) rotateY(180deg);
+  background: rgb(3, 35, 54);
+  padding: 15px;
+  color: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  box-shadow: 0 5px 10px #000;
+}
+
+.xcard .back .link {
+  border-top: solid 1px #f3f3f3;
+  height: 50px;
+  line-height: 50px;
+}
+
+.xcard .back .link a {
+  color: #f3f3f3;
+}
+
+.xcard .back h3 {
+  font-size: 30px;
+  margin-top: 20px;
+  letter-spacing: 2px;
+}
+
+.xcard .back p {
+  letter-spacing: 1px;
+}
+
+.xcard:hover .front {
+  transform: perspective(600px) rotateY(180deg);
+}
+
+.xcard:hover .back {
+  transform: perspective(600px) rotateY(360deg);
+}
+
+.image-container {
+  position: relative;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.image-container i {
+  position: absolute;
+  top: 10px; /* Ajusta la posición según tu preferencia */
+  right: 10px; /* Ajusta la posición según tu preferencia */
+  font-size: 30px;
+  z-index: 1;
 }

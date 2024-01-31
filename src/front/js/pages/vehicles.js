@@ -2,70 +2,75 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import "../../styles/index.scss";
 import { Context } from "../store/appContext";
+import jwt_decode from 'jwt-decode';
 
 const urlPhoto = "https://starwars-visualguide.com/assets/img/vehicles/"
 
 const Vehicles = () => {
     const { store, actions } = useContext(Context);
+    const [token] = useState(sessionStorage.getItem("token"));
+    const [idUser, setIdUser] = useState('');
+
+    useEffect(() => {
+        if (token && token !== "" && token !== "undefined") {
+            const decodedToken = jwt_decode(token);
+            setIdUser(decodedToken.sub);
+            actions.fetchVehicle();
+            actions.fetchFavorites();
+        }
+    }, [token]);
+
+    const toggleFavorite = async (card_id) => {
+        try {
+            const response = await fetch(`${process.env.BACKEND_URL}/api/favorites/${card_id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ group_id: 3 })
+            });
+
+            if (response.ok) {
+                actions.fetchVehicle();
+                actions.fetchFavorites();
+            } else {
+                console.error('Failed to toggle favorite');
+            }
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
+        }
+    };
 
     return (
         <div>
             <h1 className='text-white text-center'>Vehicles</h1>
-            <div className='d-flex card-container'>
+            <div className='xcards'>
                 {store.vehicle.map(({ name, image_url, manufacturer, length, passengers }, id) => {
+                    const isFavorite = store.favorites.some(favorite => favorite.card_id === id && favorite.user_id === idUser && favorite.group_id === 3);
+                    const cardClasses = `xcard ${isFavorite ? 'favorite' : ''}`;
                     return (
-                        <div className='card_catalog' key={id}>
-                            <h3 className='text-center'>{name}</h3>
-                            <img src={(urlPhoto) + image_url} className='photo' alt='photovehicle' />
-                            <p>Manufacturer: {manufacturer}</p>
-                            <p>Length: {length}</p>
-                            <p>Passengers: {passengers}</p>
-                            <div className='card_catalog_read_like'>
-                                <Link to={`/vehicle/${id}`}><button className='myButton'>Leer mas...</button></Link>
-                                {/* Botón o ícono de corazón para marcar/desmarcar favoritos */}
-                                <span>
-                                    <i className="fa-regular fa-heart"></i>
-                                </span>
+                        <div className={cardClasses} key={id}>
+                            <div className='face front'>
+                                <img src={(urlPhoto) + image_url} className='photo' alt='photovehicle' />
+                                <h3>{name}</h3>
+                            </div>
+                            <div className='face back'>
+                                <p>Manufacturer: {manufacturer}</p>
+                                <p>Length: {length}</p>
+                                <p>Passengers: {passengers}</p>
+                                <div className='card_catalog_read_like'>
+                                    <Link to={`/vehicle/${id}`}><button className='myButton'>Leer mas...</button></Link>
+                                    <i className={`fas fa-heart ${isFavorite ? 'liked' : 'like-off'}`} onClick={() => toggleFavorite(id)}></i>
+                                </div>
                             </div>
                         </div>
                     )
                 })}
             </div>
         </div>
-        // <div>
-        //     <h1 className='text-white text-center'>Vehicles</h1>
-        //     <div className="d-flex card-container">
-        //         {vehicles.map((vehicles) => (
-        //             <Link key={vehicles.id} to={`/vehicle/${vehicles.id}`} className="card card_catalog">
-        //                 <h3 className='text-center'>{vehicles.name}</h3>
-        //                 <img src={(urlPhoto) + vehicles.image_url} className='photo' />
-        //                 <p>Manufacturer: {vehicles.manufacturer}</p>
-        //                 <p>Length: {vehicles.length}</p>
-        //                 <p>Passengers: {vehicles.passengers}</p>
-        //             </Link>
-        //         ))}
-        //     </div>
-        // </div>
+
     );
 };
 
 export default Vehicles;
-
-
-// useEffect(() => {
-//     // Llama a la función fetchPeople para obtener los datos de los personajes y actualiza el estado
-//     fetchVehicles();
-// }, []);
-
-// const fetchVehicles = async () => {
-//     try {
-//         const response = await fetch(vehiclesUrl);
-//         if (!response.ok) {
-//             throw new Error('Error al obtener datos de personajes');
-//         }
-//         const data = await response.json();
-//         setVehicles(data); // Actualiza el estado con los datos de los personajes
-//     } catch (error) {
-//         console.error('Error:', error);
-//     }
-// };

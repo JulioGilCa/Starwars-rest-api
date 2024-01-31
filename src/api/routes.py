@@ -14,7 +14,6 @@ CORS(api)
 
 ########### USERS ###########
 
-
 # GET ALL USERS
 
 @api.route('/users', methods=['GET'])
@@ -236,62 +235,57 @@ def delete_vehicle(id):
         return jsonify({'Vehicle not Found'}), 404
 
 
-########## FAVORITES ###########
+########### FAVORITES ###########
 
-# ALL FAVORITES
+# GET ALL FAVORITES
 
 @api.route('/favorites', methods=['GET'])
-def handle_all_favorite():
-
-    all_favorites = Favorites.query.all()
-    favorite_serialized = [favorite_name.serialize()
-                           for favorite_name in all_favorites]
-    return jsonify(favorite_serialized), 200
+def get_all_favorites():
+    favorites = Favorites.query.all()
+    favorites_list = [favorites.serialize() for favorites in favorites]
+    return jsonify(favorites_list), 200
 
 
-# GET FAVORITES BY USER ID
+# GET FAVORITES BY ID
 
-@api.route('/favorites/<int:user_id>', methods=['GET'])
-def get_user_favorites(user_id):
+@api.route('/favorites/<int:id>', methods=['GET'])
+def get_favorites(id):
+    favorites = Favorites.query.get(id)
+    if favorites is None:
+        return jsonify({"message": "Favorites not found"}), 404
+    return jsonify({'id': favorites.id, 'group_id': favorites.group_id, 'user_id': favorites.user_id, 'card_id': favorites.card_id})
 
-    favorites = Favorites.query.filter_by(user_id=user_id).all()
-    serialized_favorites = [favorite.serialize() for favorite in favorites]
-    return jsonify(favorites=serialized_favorites), 200
 
-
-# ADD FAVORITES
-
-@api.route('/favorites', methods=['POST'])
-@jwt_required()
-def add_favorite():
+# TOGGLE FAVORITE CARD
+@api.route('/favorites/<int:card_id>', methods=['PUT'])
+@jwt_required()  # Requiere autenticación
+def toggle_favorite(card_id):
     try:
+        # Obtiene el ID del usuario desde el token JWT
         user_id = get_jwt_identity()
-        body = request.get_json()
-        favorite_list = Favorites(
-            user_id=body['user_id'],
-            people_id=body['people_id'],
-            planet_id=body['planet_id'],
-            vehicle_id=body['vehicle_id'],
-            is_favorite=True
-        )
-        db.session.add(favorite_list)
-        db.session.commit()
-        return jsonify({"message": "Favorite was Created"}), 200
+        group_id = request.json.get('group_id')
+        print("Group ID", group_id)
+
+        # Verifica si la tarjeta ya está marcada como favorita por el usuario
+        favorite = Favorites.query.filter_by(
+            user_id=user_id, card_id=card_id, group_id=group_id).first()
+
+        if favorite:
+            # Si el favorito existe, se elimina
+            db.session.delete(favorite)
+            db.session.commit()
+            return jsonify({"message": "Favorite deleted successfully"}), 200
+        else:
+            # Si no existe, se crea un nuevo registro en la tabla Favorites
+            favorite = Favorites(
+                user_id=user_id, card_id=card_id, group_id=group_id)
+            db.session.add(favorite)
+            db.session.commit()
+            return jsonify({"message": "Favorite added successfully"}), 200
+
     except Exception as e:
+        # Manejo de errores
         return jsonify({"error": str(e)}), 500
-
-
-# DELETE FAVORITES
-
-@api.route('/favorites/<int:id>', methods=['DELETE'])
-def delete_favorite(id):
-    favorite = Favorites.query.get(id)
-    if favorite:
-        db.session.delete(favorite)
-        db.session.commit()
-        return jsonify({"message": "Favorite deleted successfully"}), 200
-    else:
-        return jsonify({"message": "Favorite not found"}), 404
 
 
 if __name__ == '__main__':

@@ -34,6 +34,7 @@ const Layout = () => {
                         <Route path="/people/:id" element={token && token !== "" && token !== "undefined" ? <PeopleDetail /> : <Profile />} />
                         <Route path="/planet/:id" element={token && token !== "" && token !== "undefined" ? <PlanetDetail /> : <Profile />} />
                         <Route path="/vehicle/:id" element={token && token !== "" && token !== "undefined" ? <VehicleDetail /> : <Profile />} />
+                        <Route path="/favorites" element={token && token !== "" && token !== "undefined" ? <Profile /> : <Login />} />
                         <Route path="*" element={<h1>Page not found!</h1>} />
                     </Routes>
                     <Footer />
