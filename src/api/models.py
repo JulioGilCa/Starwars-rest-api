@@ -106,5 +106,4 @@ class Favorites(db.Model):
             "user_id": self.user_id,
             "group_id": self.group_id,
             "card_id": self.card_id,
-            # "is_favorite": self.is_favorite
         }

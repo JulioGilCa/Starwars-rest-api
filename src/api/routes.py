@@ -207,7 +207,6 @@ def get_vehicle(id):
         return jsonify({"message": "Vehicle not found"}), 404
     return jsonify({'id': vehicle.id, 'name': vehicle.name, 'manufacturer': vehicle.manufacturer, 'length': vehicle.length, 'passengers': vehicle.passengers, 'image_url': vehicle.image_url})
 
-
 # ADD VEHICLE
 
 @api.route('/vehicle', methods=['POST'])

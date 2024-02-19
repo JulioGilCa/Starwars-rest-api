@@ -146,7 +146,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			fetchDetailPlanet: async (id) => {
 				setStore({ loading: true });
-				const resPromise = await fetch(process.env.BACKEND_URL + `/api/planet/${id}`);
+				const resPromise = await fetch(planetUrl + `/${id}`);
 				if (resPromise.ok) {
 					const data = await resPromise.json();
 					setStore({
@@ -161,7 +161,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			fetchVehicle: async () => {
 				try {
-					const resPromise = await fetch(process.env.BACKEND_URL + "/api/vehicle");
+					const resPromise = await fetch(vehicleUrl);
 					if (!resPromise.ok) {
 						throw new Error("Error fetching data");
 					}
@@ -174,7 +174,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			fetchDetailVehicle: async (id) => {
 				setStore({ loading: true });
-				const resPromise = await fetch(process.env.BACKEND_URL + `/api/vehicle/${id}`);
+				const resPromise = await fetch(vehicleUrl + `/${id}`);
 				if (resPromise.ok) {
 					const data = await resPromise.json();
 					setStore({
