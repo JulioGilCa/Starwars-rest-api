@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
+
 db = SQLAlchemy()
 
 
@@ -8,6 +9,8 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
+
+    favorites = db.relationship("Favorites", backref="user", lazy=True)
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -92,10 +95,10 @@ class Vehicle(db.Model):
 
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     group_id = db.Column(db.Integer)
     card_id = db.Column(db.Integer)
-    # is_favorite = db.Column(db.Boolean)
+    
 
     def __repr__(self):
         return f'<Favorites {self.id}>'
@@ -107,3 +110,14 @@ class Favorites(db.Model):
             "group_id": self.group_id,
             "card_id": self.card_id,
         }
+
+# class UserFavorites(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#     card_id = db.Column(db.Integer, nullable=False)
+#     group_id = db.Column(db.Integer, nullable=False)
+
+#     user = db.relationship('User', backref=db.backref('favorites_association', lazy=True))
+
+#     def __repr__(self):
+#         return f'<UserFavorites {self.id}>'

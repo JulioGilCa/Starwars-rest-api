@@ -263,7 +263,6 @@ def toggle_favorite(card_id):
         # Obtiene el ID del usuario desde el token JWT
         user_id = get_jwt_identity()
         group_id = request.json.get('group_id')
-        print("Group ID", group_id)
 
         # Verifica si la tarjeta ya está marcada como favorita por el usuario
         favorite = Favorites.query.filter_by(
