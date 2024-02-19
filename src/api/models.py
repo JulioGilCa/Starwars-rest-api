@@ -98,7 +98,6 @@ class Favorites(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     group_id = db.Column(db.Integer)
     card_id = db.Column(db.Integer)
-    
 
     def __repr__(self):
         return f'<Favorites {self.id}>'
@@ -110,14 +109,3 @@ class Favorites(db.Model):
             "group_id": self.group_id,
             "card_id": self.card_id,
         }
-
-# class UserFavorites(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-#     card_id = db.Column(db.Integer, nullable=False)
-#     group_id = db.Column(db.Integer, nullable=False)
-
-#     user = db.relationship('User', backref=db.backref('favorites_association', lazy=True))
-
-#     def __repr__(self):
-#         return f'<UserFavorites {self.id}>'
